@@ -1,6 +1,10 @@
-#game-holder {
-  margin-left: 38%;
-}
+
 h1 {
   text-align: center;
+}
+
+@media (min-width: 480px) {
+  #game-holder {
+    margin-left: 30%;
+  }
 }

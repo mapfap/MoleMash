@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "skeleton": "~2.0.4",
-    "phaser": "~2.3.0"
+    "phaser": "~2.3.0",
+    "lodash": "~3.6.0",
+    "firebase": "~2.2.3"
   }
 }

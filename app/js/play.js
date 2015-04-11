@@ -1,6 +1,5 @@
 //(function(){
   game.state.add('playgame', { preload:preload, create:create, update: update });
-  game.state.start('playgame');
 
   function preload() {
     game.load.image('background', 'app/assets/background.png');
@@ -58,7 +57,7 @@ function createHole(num, x, y) {
    holes[num] = newHole;
 }
 function checkforPlacement () {
-  var whichHole = getRandomHoleNumber(0,5);
+  var whichHole = getRandomHoleNumber(0,7);
   if (holes[whichHole].populated === false) {
     spawnMole (whichHole);
     holes[whichHole].populated = true;
@@ -68,27 +67,43 @@ function checkforPlacement () {
 }
 
 function whackMole(clicked) {
+    var holeClicked = [clicked.position.x, clicked.position.y];
+    if (holeClicked[0] === 30 && holeClicked[1] === 15) {
+      holes[0].populated = false;
+    } else if (holeClicked[0] === 220 && holeClicked[1] === 15) {
+      holes[1].populated = false;
+    } else if (holeClicked[0] === 115 && holeClicked[1] === 125) {
+      holes[2].populated = false;
+    } else if (holeClicked[0] === 30 && holeClicked[1] === 200) {
+      holes[3].populated = false;
+    } else if (holeClicked[0] === 220 && holeClicked[1] === 200) {
+      holes[4].populated = false;
+    } else if (holeClicked[0] === 115 && holeClicked[1] === 300) {
+      holes[5].populated = false;
+    } else if (holeClicked[0] === 30 && holeClicked[1] === 400) {
+      holes[6].populated = false;
+    } else if (holeClicked[0] === 220 && holeClicked[1] === 400) {
+      holes[7].populated = false;
+    }
+
     clicked.kill();
     score += 100;
-    scoreBoard.text = "SCORE: " + score
-    console.log(poin)
+    scoreBoard.text = "SCORE: " + score;
 }
 
 function checkGameOver() {
-  if (holes[0].populated === true &&
-      holes[1].populated === true &&
-      holes[2].populated === true &&
-      holes[3].populated === true &&
-      holes[4].populated === true &&
-      holes[5].populated === true &&
-      holes[6].populated === true &&
-      holes[7].populated === true
-    ) {
-    gameOver();
-  }
+  var populated_holes = 0;
+  _.forEach(holes, function(hole) {
+    if (hole.populated) {
+      populated_holes++;
+    }
+  })
+    if (populated_holes > 2) {
+      gameOver();
+    }
 }
 
 function gameOver() {
-  alert('game over');
+  game.state.start('gameOver');
 }
 //})();
