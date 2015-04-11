@@ -9,6 +9,7 @@
 
   var nextMoleTime = 1000;
   var nextMoleRate = 1000;
+  var score = 0;
   var holes = {};
   createHole(0, 30, 15);
   createHole(1, 220, 15);
@@ -17,10 +18,15 @@
   createHole(4, 220, 200);
   createHole(5, 115, 300);
   createHole(6, 30, 400);
-  createHole(7, 220, 400)
+  createHole(7, 220, 400);
 
   function create() {
     game.add.sprite(0, 0, 'background');
+    scoreBoard = game.add.text(8, 8, "SCORE: " + score, { fontSize: '32px', fill: 'white' });
+    moleGroup = game.add.group();
+    moleGroup.enableBody = true;
+    moleGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    moleGroup.createMultiple(50, 'mole');
   }
 
   function update() {
@@ -32,7 +38,11 @@
   }
 
 function spawnMole (number) {
-  game.add.sprite(holes[number].xCoord, holes[number].yCoord, 'mole')
+  mole = moleGroup.create(holes[number].xCoord, holes[number].yCoord, 'mole');
+  mole.enableBody = true;
+  mole.anchor.setTo = (0.5, 0.5);
+  mole.inputEnabled = true;
+  mole.events.onInputUp.add(whackMole, this);
   nextMoleTime = game.time.now + nextMoleRate;
   nextMoleRate = nextMoleRate - 1;
 }
@@ -48,16 +58,22 @@ function createHole(num, x, y) {
    holes[num] = newHole;
 }
 function checkforPlacement () {
-  var whichHole = getRandomHoleNumber(0,7);
+  var whichHole = getRandomHoleNumber(0,5);
   if (holes[whichHole].populated === false) {
     spawnMole (whichHole);
     holes[whichHole].populated = true;
-    console.log('spawning on hole ' + whichHole);
-  } else {
-    console.log('recuuuursion');
+  } else if (holes[whichHole].populated === true && moleGroup.countLiving() > 8) {
     checkforPlacement();
   }
 }
+
+function whackMole(clicked) {
+    clicked.kill();
+    score += 100;
+    scoreBoard.text = "SCORE: " + score
+    console.log(poin)
+}
+
 function checkGameOver() {
   if (holes[0].populated === true &&
       holes[1].populated === true &&
