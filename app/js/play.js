@@ -2,8 +2,9 @@
   game.state.add('playgame', { preload:preload, create:create, update: update });
 
   function preload() {
-    game.load.image('background', 'app/assets/background.png');
+    game.load.image('background', 'app/assets/background_field.png');
     game.load.image('mole', 'app/assets/mole.png');
+    game.load.spritesheet('shrub', 'app/assets/shrub.png', 20, 20, 3)
   }
 
   var nextMoleTime = 1000;
@@ -17,6 +18,22 @@
     moleGroup.enableBody = true;
     moleGroup.physicsBodyType = Phaser.Physics.ARCADE;
     moleGroup.createMultiple(50, 'mole');
+    shrub = game.add.sprite(150, 200, 'shrub')
+    shrub.animations.add('sway', [0, 1], 2, true);
+    shrub.animations.play('sway');
+    shrub2 = game.add.sprite(30, 200, 'shrub')
+    shrub2.animations.add('sway', [0, 1], 1, true);
+    shrub2.animations.play('sway');
+    shrub3 = game.add.sprite(90, 120, 'shrub')
+    shrub3.animations.add('sway', [0, 1], 2, true);
+    shrub3.animations.play('sway');
+    shrub4 = game.add.sprite(20, 35, 'shrub')
+    shrub4.animations.add('sway', [0, 1], 1, true);
+    shrub4.animations.play('sway');
+    shrub5 = game.add.sprite(220, 300, 'shrub')
+    shrub5.animations.add('sway', [0, 1], 2, true);
+    shrub5.animations.play('sway');
+
   }
 
   function update() {
@@ -40,6 +57,7 @@ function whackMole(clicked) {
     clicked.kill();
     score += 100;
     scoreBoard.text = "SCORE: " + score;
+    nextMoleRate--;
 }
 
 function checkGameOver() {

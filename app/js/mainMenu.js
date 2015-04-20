@@ -1,10 +1,21 @@
-game.state.add('menu', {create:create});
+game.state.add('menu', { preload:preload, create:create, update:update } );
 game.state.start('menu');
 
 var startButton;
 
+function preload() {
+  game.load.image('menu', 'app/assets/main_menu.png')
+}
+
 function create() {
-  startButton = game.add.button(50, 125, 'start', startClick, this);
+  menu = game.add.sprite(0, 0, 'menu');
+  menu.events.onInputUp.add(startClick, this);
+}
+
+function update() {
+  if (game.input.onTap) {
+    startClick();
+  }
 }
 
 function startClick () {
