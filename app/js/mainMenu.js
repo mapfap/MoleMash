@@ -8,6 +8,9 @@ function preload() {
 }
 
 function create() {
+  // game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+  // game.scale.pageAlignVertically = true;
+  // game.scale.setScreenSize( true );
   menu = game.add.sprite(0, 0, 'menu');
   menu.events.onInputUp.add(startClick, this);
 }
