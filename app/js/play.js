@@ -2,9 +2,15 @@
   game.state.add('playgame', { preload:preload, create:create, update: update });
 
   function preload() {
-    game.load.image('background', 'app/assets/background_field.png');
-    game.load.image('mole', 'app/assets/mole.png');
-    game.load.image('whacked', 'app/assets/whacked_mole.png');
+    game.load.image('background', 'app/assets/stage_background.png');
+    game.load.image('mole1', 'app/assets/character_1_1.png');
+    game.load.image('whacked1', 'app/assets/character_1_2.png');
+    game.load.image('mole2', 'app/assets/character_2_1.png');
+    game.load.image('whacked2', 'app/assets/character_2_2.png');
+    game.load.image('mole3', 'app/assets/character_3_1.png');
+    game.load.image('whacked3', 'app/assets/character_3_2.png');
+    game.load.image('mole4', 'app/assets/character_4_1.png');
+    game.load.image('whacked4', 'app/assets/character_4_2.png');
     // game.load.spritesheet('shrub', 'app/assets/shrub.png', 20, 20, 3);
     game.load.audio('sword', 'app/assets/buy.mp3');
   }
@@ -18,6 +24,10 @@
 
   function create() {
     bg = game.add.sprite(0, 0, 'background');
+    bg.scale.setTo(0.1,0.1);
+    bg.anchor.setTo = (0, 0);
+    bg.height = game.height;
+    bg.width = game.width;
     bg.events.onInputUp.add(miss, this);
     bg.enableBody = true;
     bg.physicsBodyType = Phaser.Physics.ARCADE;
@@ -26,10 +36,10 @@
     hitText = game.add.text(200, 200, "", { fontSize: '22px', fill: 'white' });
     scoreBoard = game.add.text(8, 8, "SCORE: " + score, { fontSize: '22px', fill: 'white' });
     timeBoard = game.add.text(8, 38, "Time Left: " + timeLeft, { fontSize: '22px', fill: 'white' });
-    moleGroup = game.add.group();
-    moleGroup.enableBody = true;
-    moleGroup.physicsBodyType = Phaser.Physics.ARCADE;
-    moleGroup.createMultiple(50, 'mole');
+    // moleGroup = game.add.group();
+    // moleGroup.enableBody = true;
+    // moleGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    // moleGroup.createMultiple(50, 'mole');
     // shrub = game.add.sprite(150, 200, 'shrub')
     // shrub.animations.add('sway', [0, 1], 2, true);
     // shrub.animations.play('sway');
@@ -67,10 +77,14 @@
   }
 
 function spawnMole () {
-  mole = moleGroup.create(getRandomArbitrary(50, 230), getRandomArbitrary(50, 320), 'mole');
+
+  variatedMascot = game.rnd.integerInRange(1, 4);
+
+  mole = game.add.sprite(getRandomArbitrary(50, game.width - 200), getRandomArbitrary(50, game.height - 200), 'mole' + variatedMascot);
   mole.enableBody = true;
   mole.anchor.setTo = (0.5, 0.5);
   mole.inputEnabled = true;
+  mole.scale.setTo(0.2, 0.2);
   mole.events.onInputUp.add(whackMole, this);
   nextMoleRate = 1002
   nextMoleTime = game.time.now + nextMoleRate;
@@ -83,15 +97,13 @@ function spawnMole () {
 
 function whackMole(clicked) {
     clicked.kill();
-    score += 100;
+    score++;
     scoreBoard.text = "SCORE: " + score;
     nextMoleRate--;
-    var whacked = game.add.sprite(clicked.x, clicked.y, 'whacked');
-    setTimeout(function() {
-      whacked.kill();
-    }, 800);
 
-    var whacked = game.add.sprite(clicked.x, clicked.y, 'whacked');
+    var whacked = game.add.sprite(clicked.x, clicked.y, 'whacked' + variatedMascot);
+    whacked.anchor.setTo = (0.5, 0.5);
+    whacked.scale.setTo(0.2, 0.2);
     setTimeout(function() {
       whacked.kill();
     }, 800);
@@ -108,7 +120,7 @@ function whackMole(clicked) {
 }
 
 function checkGameOver() {
-  if (Math.floor(game.time.now / 1000) > 30) {
+  if (Math.floor(game.time.now / 1000) >= 30) {
     gameOver();
   }
 }
